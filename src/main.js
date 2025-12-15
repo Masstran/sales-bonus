@@ -102,7 +102,7 @@ function analyzeSalesData(data, options) {
         seller.top_products = Object.entries(seller.products_sold).map(v => ({
             sku: v[0],
             quantity: v[1]
-        })).sort(v => v.quantity).slice(0, 10);
+        })).sort((a, b) => b.quantity - a.quantity).slice(0, 10);
     })
     // @TODO: Подготовка итоговой коллекции с нужными полями
     return sellerStats.map(seller => ({
