@@ -6,7 +6,7 @@
  */
 function calculateSimpleRevenue(purchase, _product) {
     // @TODO: Расчет выручки от операции
-    const { discount, sale_price, quantity } = purchase;
+    const {discount, sale_price, quantity} = purchase;
     return sale_price * (1 - discount / 100) * quantity;
 
 }
@@ -19,7 +19,7 @@ function calculateSimpleRevenue(purchase, _product) {
  * @returns {number}
  */
 function calculateBonusByProfit(index, total, seller) {
-    const { profit } = seller;
+    const {profit} = seller;
     if (index === 0) {
         return profit * 0.15;
     } else if (index <= 2) {
@@ -50,22 +50,22 @@ function analyzeSalesData(data, options) {
         throw new Error("Некорректные входные данные");
     }
 
-    const { products, sellers, purchase_records } = data;
+    const {products, sellers, purchase_records} = data;
 
     // @TODO: Проверка наличия опций
-    const { calculateRevenue, calculateBonus } = options;
+    const {calculateRevenue, calculateBonus} = options;
     if (!calculateRevenue || !calculateBonus || !isFunction(calculateRevenue) || !isFunction(calculateBonus)) {
         throw new Error("Bad options");
     }
 
     // @TODO: Подготовка промежуточных данных для сбора статистики
     const sellerStats = sellers.map(seller => ({
-      id: seller.id,
-      name: `${seller.first_name} ${seller.last_name}`,
-      revenue: 0,
-      profit: 0,
-      sales_count: 0,
-      products_sold: {},
+        id: seller.id,
+        name: `${seller.first_name} ${seller.last_name}`,
+        revenue: 0,
+        profit: 0,
+        sales_count: 0,
+        products_sold: {},
     }))
 
     // @TODO: Индексация продавцов и товаров для быстрого доступа
@@ -99,7 +99,10 @@ function analyzeSalesData(data, options) {
     // @TODO: Назначение премий на основе ранжирования
     sellerStats.forEach((seller, index) => {
         seller.bonus = calculateBonus(index, sellerStats.length, seller);
-        seller.top_products = Object.entries(seller.products_sold).map(v => ({sku: v[0], quantity: v[1]})).sort(v => v.quantity).slice(0, 10);
+        seller.top_products = Object.entries(seller.products_sold).map(v => ({
+            sku: v[0],
+            quantity: v[1]
+        })).sort(v => v.quantity).slice(0, 10);
     })
     // @TODO: Подготовка итоговой коллекции с нужными полями
     return sellerStats.map(seller => ({
